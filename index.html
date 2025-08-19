@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNSキャンペーンプロンプト</title>
+    <style>
+        /* 見た目を整えるための簡単なCSS */
+        body { font-family: sans-serif; line-height: 1.6; margin: 2em; }
+        .container { max-width: 800px; margin: 0 auto; }
+        pre { background-color: #f4f4f4; padding: 1em; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+        button { font-size: 1.1em; padding: 0.5em 1em; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; }
+        #copy-status { color: green; font-weight: bold; margin-left: 1em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>初秋に向けたSNSキャンペーン投稿案生成プロンプト</h1>
+        <p>このプロンプトは、夏の終わりから初秋にかけてのSNSキャンペーン投稿案を生成するためのものです。下のボタンを押して全文をコピーし、AIツールに貼り付けてご利用ください。</p>
+        
+        <button id="copy-button">プロンプトをコピー</button>
+        <span id="copy-status"></span>
+
+        <pre id="prompt-content">読み込み中...</pre>
+    </div>
+
+    <script>
+        // このJavaScriptが、プロンプトを読み込んでコピー機能を実装します
+
+        // 1. プロンプトが保存されているファイルのパスを指定
+        // ★★★もしファイル名や場所を変えたら、ここを書き換えてください★★★
+        const promptFilePath = './prompts/sns_campaign_prompt_body.txt';
+
+        // 2. ページが読み込まれたら、プロンプトファイルを読み込みに行く
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch(promptFilePath)
+                .then(response => response.text())
+                .then(text => {
+                    // 3. 読み込んだテキストを画面に表示
+                    const promptContentElement = document.getElementById('prompt-content');
+                    promptContentElement.textContent = text;
+                })
+                .catch(error => {
+                    console.error('プロンプトの読み込みに失敗しました:', error);
+                    document.getElementById('prompt-content').textContent = 'エラー：プロンプトを読み込めませんでした。';
+                });
+        });
+
+        // 4. コピーボタンが押されたときの処理
+        const copyButton = document.getElementById('copy-button');
+        const copyStatus = document.getElementById('copy-status');
+
+        copyButton.addEventListener('click', () => {
+            const promptText = document.getElementById('prompt-content').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                // 成功したらメッセージを表示
+                copyStatus.textContent = 'コピーしました！';
+                // 2秒後にメッセージを消す
+                setTimeout(() => {
+                    copyStatus.textContent = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('コピーに失敗しました', err);
+                copyStatus.textContent = 'コピーに失敗しました';
+            });
+        });
+    </script>
+</body>
+</html>
